@@ -28,6 +28,9 @@ namespace PizzeriaAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSwaggerGen();
+
+
             services.AddDbContext<PizzeriaDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
         }
@@ -35,11 +38,16 @@ namespace PizzeriaAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("v1/swagger.json", "swagger");
+            });
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();
